@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sebqv97.myapplication.core.util.Resource
+import com.sebqv97.myapplication.feature_users.domain.model.UserItemModel
 import com.sebqv97.myapplication.feature_users.domain.use_case.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.last
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class UserListViewModel @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase
 ) : ViewModel(){
-
+    private lateinit var usersList:List<UserItemModel>
     private val _state = mutableStateOf(UsersListState())
     val state: State<UsersListState> = _state
 
@@ -29,6 +30,7 @@ class UserListViewModel @Inject constructor(
             when(result){
                 is Resource.Success -> {
                     _state.value = UsersListState(users = result.data!!)
+                    usersList = result.data
                 }
                 is Resource.Error ->{
                     _state.value = UsersListState(error = result.errorType)

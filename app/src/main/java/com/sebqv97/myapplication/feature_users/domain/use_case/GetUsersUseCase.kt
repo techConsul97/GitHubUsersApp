@@ -28,13 +28,6 @@ class GetUsersUseCase @Inject constructor(
                 usersRepository.deleteUsers()
                 usersRepository.insertUsers(usersListEntity)
 
-                usersRepository.readUsers().collect{ data->
-                    if(data.isEmpty()){
-                        emit(Resource.Error<List<UserItemModel>>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
-                    }else{
-                        emit(Resource.Success(data.map { it.toUserItemModel() }))
-                    }
-                }
 
             }
         } catch (e: HttpException) {
@@ -47,6 +40,13 @@ class GetUsersUseCase @Inject constructor(
 
 
 
+        usersRepository.readUsers().collect{ data->
+            if(data.isEmpty()){
+                emit(Resource.Error<List<UserItemModel>>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
+            }else{
+                emit(Resource.Success(data.map { it.toUserItemModel() }))
+            }
+        }
 
     }
 

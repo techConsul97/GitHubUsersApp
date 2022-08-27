@@ -27,11 +27,11 @@ class UserDetailsViewModel @Inject constructor(
     val state: State<UserDetailsState> = _state
 
 
-//        init {
-//            savedStateHandle.get<String>(Constants.PARAM_USERNAME)?.let { username ->
-//                getUserDetails(username)
-//            }
-//        }
+        init {
+            savedStateHandle.get<String>(Constants.PARAM_USERNAME)?.let { username ->
+                getUserDetails(username)
+            }
+        }
 
 
 

@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        val viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
+       val viewModel = ViewModelProvider(this)[UserDetailsViewModel::class.java]
         viewModel.getUserDetails("kevinclark")
     }
 }

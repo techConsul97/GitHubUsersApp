@@ -32,16 +32,6 @@ class GetUsersDetailsUseCase @Inject constructor(
                     usersRepository.insertUser(userDetailsEntity)
 
 
-                    //Search it and retrieve it
-                  usersRepository.readSpecificUser(searchedUsername).collect{ foundUser->
-                     if(foundUser.equals(null)){
-                         emit(Resource.Error<UserDetailsItemModel>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
-                     }else{
-                         emit(Resource.Success(foundUser.toUserDetailsItemModel()))
-                     }
-
-                  }
-
                 }
 
             }else{
@@ -51,6 +41,16 @@ class GetUsersDetailsUseCase @Inject constructor(
 
         }catch (e:IOException){
             emit(Resource.Error(ErrorTypes.InternetConnectionFailed()))
+        }
+
+        //Search it and retrieve it
+        usersRepository.readSpecificUser(searchedUsername).collect{ foundUser->
+            if(foundUser.equals(null)){
+                emit(Resource.Error<UserDetailsItemModel>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
+            }else{
+                emit(Resource.Success(foundUser.toUserDetailsItemModel()))
+            }
+
         }
     }
 }
