@@ -17,11 +17,13 @@ data class UserDetailsEntity(
     val following: Int?,
     val followingUrl: String?,
     val hireable: Boolean?,
-
+    val location:String?,
     val username: String?,
     val name: String?,
     val reposUrl: String?,
     val twitterUsername: String?,
+    val publicReposNumber:Int?,
+    val profileUrl:String?
 
     ){
     fun toUserDetailsItemModel() = UserDetailsItemModel(
@@ -38,6 +40,10 @@ data class UserDetailsEntity(
         username = username,
         name = name,
         reposUrl = reposUrl,
-        twitterUsername = twitterUsername
+        twitterUsername = twitterUsername,
+        location = location,
+        publicReposNumber = publicReposNumber,
+        profileUrl = profileUrl
+
     )
 }

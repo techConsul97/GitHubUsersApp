@@ -1,23 +1,26 @@
 package com.sebqv97.myapplication.feature_users.presentation.user_list
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sebqv97.myapplication.core.util.Resource
-import com.sebqv97.myapplication.feature_users.domain.model.UserItemModel
+import com.sebqv97.myapplication.feature_users.domain.use_case.FetchUserUseCase
 import com.sebqv97.myapplication.feature_users.domain.use_case.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UserListViewModel @Inject constructor(
+    private val fetchUserUseCase: FetchUserUseCase,
     private val getUsersUseCase: GetUsersUseCase
-) : ViewModel(){
-    private lateinit var usersList:List<UserItemModel>
+
+) : ViewModel() {
+
     private val _state = mutableStateOf(UsersListState())
     val state: State<UsersListState> = _state
 
@@ -26,13 +29,13 @@ class UserListViewModel @Inject constructor(
     }
 
     private fun getUsers() {
-        getUsersUseCase().onEach{result->
-            when(result){
+        getUsersUseCase().onEach { result ->
+            when (result) {
                 is Resource.Success -> {
                     _state.value = UsersListState(users = result.data!!)
-                    usersList = result.data
+
                 }
-                is Resource.Error ->{
+                is Resource.Error -> {
                     _state.value = UsersListState(error = result.errorType)
                 }
                 is Resource.Loading -> {
@@ -43,5 +46,28 @@ class UserListViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun getUserByUsername(searchedUserByUsername: String?) {
+        viewModelScope.launch {
+            fetchUserUseCase(searchedUserByUsername).collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _state.value = UsersListState(users = listOf(result.data!!))
+                        this.coroutineContext.cancel()
+                        Log.d("state",_state.value.toString())
 
+                    }
+                    is Resource.Error -> {
+                        _state.value = UsersListState(error = result.errorType)
+                        this.coroutineContext.cancel()
+                    }
+                    is Resource.Loading -> {
+                        _state.value = UsersListState(isLoading = true)
+                        this.coroutineContext.cancel()
+                    }
+                }
+
+            }
+        }
+
+    }
 }

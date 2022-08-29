@@ -48,10 +48,7 @@ data class ListUsersDto(
     fun toUserEntity(): UserEntity = UserEntity(
         id = id,
         avatarUrl = avatarUrl,
-        followingUrl = followingUrl,
-        followersUrl = followersUrl,
         username = login,
-        reposUrl = reposUrl,
-        htmlUrl = htmlUrl
+
     )
 }

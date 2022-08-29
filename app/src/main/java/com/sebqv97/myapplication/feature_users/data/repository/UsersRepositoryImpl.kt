@@ -1,5 +1,6 @@
 package com.sebqv97.myapplication.feature_users.data.repository
 
+import android.util.Log
 import com.sebqv97.myapplication.feature_users.data.local.UsersDao
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserDetailsEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserEntity
@@ -20,7 +21,9 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUser(searchedUsername: String): Response<UserDetailsDto> {
-        return usersApi.getDataFromPath(searchedUsername)
+        val respomse = usersApi.getDataFromPath(searchedUsername)
+        Log.d("Response",respomse.toString())
+        return respomse
     }
 
     override suspend fun deleteUsers() {

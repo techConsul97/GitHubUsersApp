@@ -84,6 +84,9 @@ data class UserDetailsDto(
         username = login,
         name = name,
         reposUrl = reposUrl,
-        twitterUsername = twitterUsername
+        twitterUsername = twitterUsername,
+        location = location,
+        publicReposNumber = publicRepos,
+        profileUrl = htmlUrl
     )
 }

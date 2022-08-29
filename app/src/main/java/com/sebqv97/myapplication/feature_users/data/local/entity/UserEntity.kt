@@ -9,19 +9,12 @@ data class UserEntity (
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val avatarUrl: String,
-    val followersUrl: String,
-    val followingUrl: String,
-    val htmlUrl: String,
     val username: String,
-    val reposUrl: String,
+
     ){
     fun toUserItemModel(): UserItemModel = UserItemModel(
 
         avatarUrl = avatarUrl,
-        htmlUrl = htmlUrl,
-        followersUrl = followersUrl,
-        followingUrl = followingUrl,
-        reposUrl = reposUrl,
         username = username,
         id = id
 
