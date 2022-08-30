@@ -1,21 +1,28 @@
 package com.sebqv97.myapplication.feature_users.presentation.user_details.components
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import com.sebqv97.myapplication.feature_users.domain.model.UserDetailsItemModel
+import java.net.URI
 
 @Composable
 fun UserFollowersComponent(modifier: Modifier, user: UserDetailsItemModel) {
@@ -37,8 +44,6 @@ fun UserFollowersComponent(modifier: Modifier, user: UserDetailsItemModel) {
         }
 
 
-
-
     }
 
 
@@ -48,29 +53,40 @@ fun UserFollowersComponent(modifier: Modifier, user: UserDetailsItemModel) {
 @Composable
 fun BioElement(modifier: Modifier, user: UserDetailsItemModel) {
 
+    val context = LocalContext.current
+    val openProfileIntent = remember {
+        Intent(Intent.ACTION_VIEW,Uri.parse(user.profileUrl))
+    }
     Column(horizontalAlignment = Alignment.Start) {
 
         Text(text = "BIO", color = MaterialTheme.colors.primary)
-        Text(
-            text = user.bio!!,
-            fontWeight = FontWeight.W200,
-            fontSize = 14.sp,
-            textAlign = TextAlign.Start
-        )
-        Button(
-            onClick = { /*TODO IMPLEMENT INTENT TO OPEN WEB WHEN PRESSED*/ },
-            colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                backgroundColor = MaterialTheme.colors.primary
-            ),
-            shape = RoundedCornerShape(50),
-            modifier = modifier.fillMaxWidth()
+        if (user.bio != null) {
+            Text(
+                text = user.bio,
+                fontWeight = FontWeight.W200,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Start
+            )
+        } else {
+            Text(text = "Biography not Available", textAlign = TextAlign.Center)
+        }
+        if (user.profileUrl != null) {
+            Button(
+                onClick = {context.startActivity(openProfileIntent)},
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    backgroundColor = MaterialTheme.colors.primary
+                ),
+                shape = RoundedCornerShape(50),
+                modifier = modifier.fillMaxWidth()
 
-        ) {
-            Text(text = "MY PROFILE", color = Color.White)
+            ) {
+                Text(text = "MY PROFILE", color = Color.White)
 
+            }
         }
     }
+
 
 }
 
@@ -79,11 +95,15 @@ fun BioElement(modifier: Modifier, user: UserDetailsItemModel) {
 fun FollowersFollowingUsernameElement(modifier: Modifier, user: UserDetailsItemModel) {
 
 
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.fillMaxWidth()
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = modifier.padding(start = 12.dp)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.padding(start = 12.dp)
+        ) {
             Text(text = "Followers", color = Color.Black)
             Text(text = user.followers.toString(), color = MaterialTheme.colors.primary)
         }
@@ -91,7 +111,10 @@ fun FollowersFollowingUsernameElement(modifier: Modifier, user: UserDetailsItemM
             Text(text = "Following", color = Color.Black)
             Text(text = user.following.toString(), color = MaterialTheme.colors.primary)
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.padding(end = 12.dp)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.padding(end = 12.dp)
+        ) {
             Text(text = "Username", color = Color.Black)
             Text(text = user.username.toString(), color = MaterialTheme.colors.primary)
         }
@@ -100,6 +123,8 @@ fun FollowersFollowingUsernameElement(modifier: Modifier, user: UserDetailsItemM
     }
 
 }
+
+
 
 @Preview
 @Composable
@@ -125,7 +150,6 @@ fun dsf() {
             profileUrl = null
         )
     )
-
 
 
 }

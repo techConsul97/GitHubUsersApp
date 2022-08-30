@@ -35,7 +35,7 @@ class UserDetailsViewModel @Inject constructor(
 
 
 
-    fun getUserDetails(searchedUser:String){
+    private fun getUserDetails(searchedUser:String){
 
         getUsersDetailsUseCase(searchedUser).onEach { result ->
             when(result){

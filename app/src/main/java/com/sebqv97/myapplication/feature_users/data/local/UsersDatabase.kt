@@ -3,11 +3,12 @@ package com.sebqv97.myapplication.feature_users.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.sebqv97.myapplication.feature_users.data.local.entity.FavoriteUsersEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserDetailsEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserEntity
 
 @Database(
-    entities = [UserEntity::class,UserDetailsEntity::class],
+    entities = [UserEntity::class,UserDetailsEntity::class,FavoriteUsersEntity::class],
     version = 1,
     exportSchema = false
 )

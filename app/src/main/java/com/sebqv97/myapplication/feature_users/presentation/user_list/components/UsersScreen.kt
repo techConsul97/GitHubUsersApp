@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sebqv97.myapplication.feature_users.presentation.Screens
+import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUseViewModel
+import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUserWidgetState
 import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListViewModel
 import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
 
@@ -27,12 +29,13 @@ import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
     fun UsersScreen(
     navController: NavController,
     viewModel: UserListViewModel = hiltViewModel(),
+    searchBarViewModel: SearchUseViewModel = hiltViewModel(),
     modifier: Modifier
     ) {
         val state = viewModel.state.value
 
         Box(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize().padding(12.dp)
         ){
             LazyColumn(
                 modifier = modifier.fillMaxSize()
@@ -42,6 +45,7 @@ import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
                     UserLayout(
                         user = user,
                         onUserClicked = {
+                            searchBarViewModel.updateSearchWidgetState(SearchUserWidgetState.CLOSED)
                             navController.navigate(Screens.UserDetailScreen.route + "/${user.username}")
                         },
                         onFavoriteClicked = {},//ToBeImplemented

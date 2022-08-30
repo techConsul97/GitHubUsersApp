@@ -23,15 +23,18 @@ fun UserReposAndIdElement(
     modifier: Modifier,
     user:UserDetailsItemModel
 ) {
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
+            .padding(8.dp)
+            .fillMaxWidth()
     ) {
 
         UserReposElement(modifier = modifier, user = user)
 
         UserIdElement(modifier = modifier, user = user)
-        
+
         UserBlogElement(modifier = modifier, user = user)
 
 
@@ -40,6 +43,7 @@ fun UserReposAndIdElement(
 
 @Composable
 fun UserReposElement(modifier: Modifier,user:UserDetailsItemModel) {
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -21,9 +21,9 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUser(searchedUsername: String): Response<UserDetailsDto> {
-        val respomse = usersApi.getDataFromPath(searchedUsername)
-        Log.d("Response",respomse.toString())
-        return respomse
+        return  usersApi.getDataFromPath(searchedUsername)
+
+
     }
 
     override suspend fun deleteUsers() {
