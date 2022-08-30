@@ -49,6 +49,7 @@ data class ListUsersDto(
         id = id,
         avatarUrl = avatarUrl,
         username = login,
+        isFavorite = false
 
     )
 }

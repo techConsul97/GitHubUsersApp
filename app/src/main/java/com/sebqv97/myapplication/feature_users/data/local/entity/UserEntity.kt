@@ -10,13 +10,15 @@ data class UserEntity (
     val id: Int,
     val avatarUrl: String,
     val username: String,
+    val isFavorite:Boolean
 
     ){
     fun toUserItemModel(): UserItemModel = UserItemModel(
 
         avatarUrl = avatarUrl,
         username = username,
-        id = id
+        id = id,
+        isFavorite = isFavorite
 
     )
 }

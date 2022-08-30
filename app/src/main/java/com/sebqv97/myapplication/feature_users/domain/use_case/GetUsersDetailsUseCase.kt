@@ -27,7 +27,7 @@ class GetUsersDetailsUseCase @Inject constructor(
                 searchedUserResponse.body().let {
                     val userDetailsEntity = it!!.toUserDetailsEntity()
                     //delete if exists
-                    usersRepository.deleteUser(userDetailsEntity)
+                    usersRepository.deleteUserFromUserDetails(userDetailsEntity)
                     //insert into db
                     usersRepository.insertUser(userDetailsEntity)
 
@@ -35,8 +35,18 @@ class GetUsersDetailsUseCase @Inject constructor(
                 }
 
             }else{
+                usersRepository.readSpecificUser(searchedUsername).collect{ foundUser->
+                    if(foundUser.equals(null)){
+                        emit(Resource.Error<UserDetailsItemModel>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
+                    }else{
+                        emit(Resource.Success(foundUser.toUserDetailsItemModel()))
+                    }
+
+                }
+
                 val errorCode = searchedUserResponse.code()
                emit(Resource.Error(ErrorTypes.ProblematicHttpRequest(errorCode)))
+
             }
 
         }catch (e:IOException){

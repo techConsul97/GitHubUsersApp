@@ -26,50 +26,53 @@ import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
 
 
 @Composable
-    fun UsersScreen(
+fun UsersScreen(
     navController: NavController,
     viewModel: UserListViewModel = hiltViewModel(),
     searchBarViewModel: SearchUseViewModel = hiltViewModel(),
     modifier: Modifier
+) {
+    val state = viewModel.state.value
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp)
     ) {
-        val state = viewModel.state.value
-
-        Box(
-            modifier = modifier.fillMaxSize().padding(12.dp)
-        ){
-            LazyColumn(
-                modifier = modifier.fillMaxSize()
-            ){
-                items(state.users){
-                    user ->
-                    UserLayout(
-                        user = user,
-                        onUserClicked = {
-                            searchBarViewModel.updateSearchWidgetState(SearchUserWidgetState.CLOSED)
-                            navController.navigate(Screens.UserDetailScreen.route + "/${user.username}")
-                        },
-                        onFavoriteClicked = {},//ToBeImplemented
-                        modifier = modifier
-                    )
-                }
+        LazyColumn(
+            modifier = modifier.fillMaxSize()
+        ) {
+            items(state.users) { user ->
+                UserLayout(
+                    user = user,
+                    onUserClicked = {
+                        searchBarViewModel.updateCurrentScreen(Screens.UserDetailScreen)
+                        searchBarViewModel.updateSearchWidgetState(SearchUserWidgetState.CLOSED)
+                        navController.navigate(Screens.UserDetailScreen.route + "/${user.username}")
+                    },
+                    onFavoriteClicked = {},//ToBeImplemented
+                    modifier = modifier
+                )
             }
-            if(state.error != null){
-                val errorMessage = getWordsUseCaseErrorHandler(state.error)
-               Text(text =errorMessage,
-                   textAlign = TextAlign.Center,
-                   color = MaterialTheme.colors.error,
-                   modifier = modifier
-                       .fillMaxWidth()
-                       .padding(horizontal = 20.dp)
-                       .align(Alignment.Center)
-               )
-
-            }
-            if(state.isLoading){
-                CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
-            }
-
+        }
+        if (state.error != null) {
+            val errorMessage = getWordsUseCaseErrorHandler(state.error)
+            Text(
+                text = errorMessage,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.error,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .align(Alignment.Center)
+            )
 
         }
-        
+        if (state.isLoading) {
+            CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
+        }
+
+
     }
+
+}

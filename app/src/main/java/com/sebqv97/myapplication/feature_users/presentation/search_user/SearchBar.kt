@@ -9,9 +9,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -21,6 +23,7 @@ import com.sebqv97.myapplication.R
 import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListViewModel
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
     fun SearchUserAppBar(
         modifier: Modifier,
@@ -29,6 +32,8 @@ import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListVi
         onCloseClick:()->Unit,
         onSearchClick:(String)->Unit,
     ) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
         Surface(
             modifier = modifier
                 .fillMaxWidth()
@@ -80,8 +85,9 @@ import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListVi
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
+                        keyboardController?.hide()
                         onSearchClick(text)
-                    }
+                    },
                 ),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,

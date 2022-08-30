@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 Scaffold(
                     topBar = {
-                        TopBarScreen(searchUseViewModel = hiltViewModel(), userListViewModel = hiltViewModel())
+                        TopBarScreen(searchUseViewModel = hiltViewModel())
                     },
                 content = {
                     // A surface container using the 'background' color from the theme
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
         MyApplicationTheme {
             Scaffold(
                 topBar = {
-                    TopBarScreen(searchUseViewModel = hiltViewModel(), userListViewModel = hiltViewModel())
+                    TopBarScreen(searchUseViewModel = hiltViewModel())
                 })
             {
 

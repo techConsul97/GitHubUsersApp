@@ -63,7 +63,7 @@ fun BioElement(modifier: Modifier, user: UserDetailsItemModel) {
         if (user.bio != null) {
             Text(
                 text = user.bio,
-                fontWeight = FontWeight.W200,
+                fontWeight = FontWeight.W400,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Start
             )

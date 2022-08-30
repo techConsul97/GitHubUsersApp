@@ -14,6 +14,7 @@ interface UsersRepository {
     fun readUser(searchedUsername: String):Flow<UserEntity>
     fun readSpecificUser(searchedUsername: String):Flow<UserDetailsEntity>
 
+    suspend fun insertUserFromUserList(user: UserEntity)
     suspend fun insertUser(user:UserDetailsEntity)
     suspend fun insertUsers(users:List<UserEntity>)
 
@@ -21,7 +22,8 @@ interface UsersRepository {
     suspend fun getUser(searchedUsername:String): Response<UserDetailsDto>
 
 
-    suspend fun deleteUser(user:UserDetailsEntity)
+    suspend fun deleteUserFromUserDetails(user:UserDetailsEntity)
+    suspend fun deleteUserFromUserList(user:UserEntity)
     suspend fun deleteUsers()
 
 

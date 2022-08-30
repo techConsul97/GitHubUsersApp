@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.sebqv97.myapplication.R
 import com.sebqv97.myapplication.feature_users.domain.model.UserDetailsItemModel
 import com.sebqv97.myapplication.feature_users.presentation.Screens
+import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUseViewModel
 import com.sebqv97.myapplication.feature_users.presentation.user_details.components.UserFollowersComponent
 import com.sebqv97.myapplication.feature_users.presentation.user_details.components.UserOverview
 import com.sebqv97.myapplication.feature_users.presentation.user_details.components.UserReposAndIdElement
@@ -29,18 +30,22 @@ import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
 fun UserDetailsScreen(
     modifier: Modifier,
     navController: NavController,
-    viewModel: UserDetailsViewModel = hiltViewModel()
+    viewModel: UserDetailsViewModel = hiltViewModel(),
+    searchUseViewModel: SearchUseViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
     state.user?.let { user ->
 
             Scaffold(backgroundColor = Color.Transparent,
                 topBar = {
-                    UserAppBar(
-                        modifier = modifier,
-                        navController = navController,
-                        user = user
-                    )
+                    if(searchUseViewModel.currentScreen.value == Screens.UserDetailScreen){
+                        UserAppBar(
+                            modifier = modifier,
+                            navController = navController,
+                            user = user
+                        )
+                    }
+
                 },
                 content = {
                     Column {

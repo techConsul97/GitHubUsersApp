@@ -1,17 +1,19 @@
 package com.sebqv97.myapplication.feature_users.presentation.user_list.components
 
 
-import android.provider.ContactsContract
-import android.widget.ImageButton
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,20 +25,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import com.sebqv97.myapplication.feature_users.domain.model.UserItemModel
 import com.sebqv97.myapplication.R
+import com.sebqv97.myapplication.feature_users.domain.model.UserItemModel
+import com.sebqv97.myapplication.feature_users.presentation.add_favorite.AddFavoriteUserViewModel
 
 
-
-    @Composable
+@Composable
     fun UserLayout(
         user : UserItemModel,
         modifier:Modifier,
         onFavoriteClicked: (UserItemModel)->Unit,
-        onUserClicked:(UserItemModel) -> Unit
+        onUserClicked:(UserItemModel) -> Unit,
+        addFavoriteUserViewModel: AddFavoriteUserViewModel = hiltViewModel()
+
     ){
+    val userState = addFavoriteUserViewModel.state.value
+
+    val favoriteIconColor = if(user.isFavorite)Color.Red else Color.LightGray
+
         Surface(
             modifier = modifier
                 .fillMaxWidth()
@@ -82,11 +90,18 @@ import com.sebqv97.myapplication.R
                 }
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        user.updateFavoriteStatus(newValue = true)
+                        addFavoriteUserViewModel.updateUserState(user)
+                              },
                     modifier = modifier.padding(end = 16.dp)
                 ) {
+
+
+
                     Icon(
-                        imageVector = Icons.Default.Favorite,
+                        imageVector = Icons.Outlined.Favorite,
+                        tint =  favoriteIconColor,
                         contentDescription ="Add favorite"
                     )
 

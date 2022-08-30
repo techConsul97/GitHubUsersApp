@@ -31,7 +31,7 @@ fun UserOverview(
     modifier: Modifier,
     user: UserDetailsItemModel
 ) {
-    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(30.dp), elevation = 4.dp,) {
+    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(30.dp), elevation = 8.dp,) {
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,28 +55,27 @@ fun UserOverview(
             )
 
             Text(
-                text = user.name ?: "Name Not Available",
+                text = user.name ?: "<Name Not Available>",
                 textAlign = TextAlign.Center,
                 fontStyle = FontStyle.Italic,
                 fontSize = 22.sp
             )
             Text(
-                text = user.email ?: "Email Not Available",
+                text = user.email ?: "<Email Not Available>",
                 textAlign = TextAlign.Center,
                 fontStyle = FontStyle.Italic,
                 fontSize = 18.sp
             )
             Box(
 
-
-                modifier = modifier.padding(8.dp).border(BorderStroke(2.dp, Color.LightGray), shape = RoundedCornerShape(50))
+                modifier = modifier.padding(12.dp).border(BorderStroke(2.dp, Color.LightGray), shape = RoundedCornerShape(50))
 
             ) {
-                Column(modifier = Modifier.padding(10.dp)) {
+                Column(modifier = Modifier.padding(15.dp)) {
                     Text(
                         text = user.location ?: "Location Not Available",
-                        fontWeight = FontWeight.W500,
-                        fontSize = 16.sp
+                        fontWeight = FontWeight.W700,
+                        fontSize = 17.sp
                     )
 
                 }

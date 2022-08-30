@@ -1,15 +1,21 @@
 package com.sebqv97.myapplication.feature_users.presentation.user_details.components
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,7 +27,7 @@ import com.sebqv97.myapplication.R
 @Composable
 fun UserReposAndIdElement(
     modifier: Modifier,
-    user:UserDetailsItemModel
+    user: UserDetailsItemModel
 ) {
 
     Row(
@@ -42,7 +48,7 @@ fun UserReposAndIdElement(
 }
 
 @Composable
-fun UserReposElement(modifier: Modifier,user:UserDetailsItemModel) {
+fun UserReposElement(modifier: Modifier, user: UserDetailsItemModel) {
 
     Column(
         modifier = modifier,
@@ -67,7 +73,7 @@ fun UserReposElement(modifier: Modifier,user:UserDetailsItemModel) {
 }
 
 @Composable
-fun UserIdElement(modifier: Modifier,user:UserDetailsItemModel) {
+fun UserIdElement(modifier: Modifier, user: UserDetailsItemModel) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -91,9 +97,17 @@ fun UserIdElement(modifier: Modifier,user:UserDetailsItemModel) {
 }
 
 @Composable
-fun UserBlogElement(modifier: Modifier,user:UserDetailsItemModel) {
-    if(user.blog.isNullOrEmpty()){}
-    else{
+fun UserBlogElement(modifier: Modifier, user: UserDetailsItemModel) {
+    var context: Context? = null
+    if (user.blog.isNullOrEmpty()) {
+        context = null
+    } else {
+        context = LocalContext.current
+        val openBlogIntent = remember {
+            Intent(Intent.ACTION_VIEW, Uri.parse(user.blog))
+        }
+
+
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -105,6 +119,8 @@ fun UserBlogElement(modifier: Modifier,user:UserDetailsItemModel) {
                 modifier = Modifier
                     .size(88.dp)
                     .clip(CircleShape)
+                    .clickable { context.startActivity(openBlogIntent) }
+
             )
             Text(
                 text = "My Blog",
@@ -117,29 +133,32 @@ fun UserBlogElement(modifier: Modifier,user:UserDetailsItemModel) {
 
 
 }
+
 @Preview
 @Composable
 fun UserReposAndIdElement(
 
 ) {
-    UserReposAndIdElement(modifier = Modifier, user = UserDetailsItemModel(
-        avatarUrl = null,
-        bio = "My name is Sebastian, I am here to learn",
-        location = "Alton, Hampshire",
-        blog = "This is my blog",
-        createdAt = null,
-        email = "sebastanopolgmail.com",
-        followingUrl = null,
-        followers = 34,
-        following = 22,
-        hireable = true,
-        id = 2,
-        username = "sebastanopol",
-        name = "Sebastian Leonti",
-        reposUrl = null,
-        publicReposNumber = 23,
-        twitterUsername = null,
-        profileUrl = null
-    ) )
+    UserReposAndIdElement(
+        modifier = Modifier, user = UserDetailsItemModel(
+            avatarUrl = null,
+            bio = "My name is Sebastian, I am here to learn",
+            location = "Alton, Hampshire",
+            blog = "This is my blog",
+            createdAt = null,
+            email = "sebastanopolgmail.com",
+            followingUrl = null,
+            followers = 34,
+            following = 22,
+            hireable = true,
+            id = 2,
+            username = "sebastanopol",
+            name = "Sebastian Leonti",
+            reposUrl = null,
+            publicReposNumber = 23,
+            twitterUsername = null,
+            profileUrl = null
+        )
+    )
 
 }

@@ -20,6 +20,10 @@ class UsersRepositoryImpl @Inject constructor(
         return usersApi.getAllData()
     }
 
+
+
+
+
     override suspend fun getUser(searchedUsername: String): Response<UserDetailsDto> {
         return  usersApi.getDataFromPath(searchedUsername)
 
@@ -30,9 +34,16 @@ class UsersRepositoryImpl @Inject constructor(
         usersDao.deleteAll()
     }
 
-    override suspend fun deleteUser(user:UserDetailsEntity) {
-        usersDao.deleteOne(user)
+    override suspend fun insertUserFromUserList(user: UserEntity) {
+        usersDao.insertOneUserList(user)
+    }
 
+    override suspend fun deleteUserFromUserDetails(user:UserDetailsEntity) {
+        usersDao.deleteOneUserDetails(user)
+
+    }
+    override suspend fun deleteUserFromUserList(user: UserEntity) {
+        usersDao.deleteOneUserUserList(user)
     }
 
     override fun readSpecificUser(searchedUsername: String): Flow<UserDetailsEntity> {

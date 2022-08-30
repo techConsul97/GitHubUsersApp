@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserListViewModel @Inject constructor(
-    private val fetchUserUseCase: FetchUserUseCase,
+
     private val getUsersUseCase: GetUsersUseCase
 
 ) : ViewModel() {
@@ -46,28 +46,5 @@ class UserListViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun getUserByUsername(searchedUserByUsername: String?) {
-        viewModelScope.launch {
-            fetchUserUseCase(searchedUserByUsername).collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        _state.value = UsersListState(users = listOf(result.data!!))
-                        this.coroutineContext.cancel()
-                        Log.d("state",_state.value.toString())
 
-                    }
-                    is Resource.Error -> {
-                        _state.value = UsersListState(error = result.errorType)
-                        this.coroutineContext.cancel()
-                    }
-                    is Resource.Loading -> {
-                        _state.value = UsersListState(isLoading = true)
-                        this.coroutineContext.cancel()
-                    }
-                }
-
-            }
-        }
-
-    }
 }

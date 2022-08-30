@@ -11,6 +11,9 @@ interface UsersDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOneUserList(entity:UserEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(entitiesList:List<UserEntity>)
 
 
@@ -27,7 +30,10 @@ interface UsersDao {
 
 
     @Delete
-    suspend fun deleteOne(user:UserDetailsEntity)
+    suspend fun deleteOneUserDetails(user:UserDetailsEntity)
+
+    @Delete
+    suspend fun deleteOneUserUserList(user:UserEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOne(user: UserDetailsEntity)
