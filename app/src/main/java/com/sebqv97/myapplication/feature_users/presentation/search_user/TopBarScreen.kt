@@ -25,7 +25,7 @@ import com.sebqv97.myapplication.feature_users.presentation.user_list.components
 
 
 @Composable
-fun TopBarScreen(searchUseViewModel: SearchUseViewModel = hiltViewModel()){
+fun TopBarScreen(searchUseViewModel: SearchUseViewModel = hiltViewModel(),modifier: Modifier){
 
     val searchWidgetState by searchUseViewModel.searchWidgetState
     val searchUserTextState by searchUseViewModel.searchUserTextState
@@ -85,12 +85,10 @@ fun TopAppBar(
     onSearchTriggered: () -> Unit,
     viewModel: SearchUseViewModel = hiltViewModel()
 ) {
-    val currentScreen by viewModel.currentScreen
-
-    when (searchWidgetState) {
-        SearchUserWidgetState.CLOSED -> {
-
-            if (currentScreen == Screens.UsersScreen) {
+    val currentScreen = viewModel.currentScreen.value
+    if (currentScreen == Screens.UsersScreen) {
+        when (searchWidgetState) {
+            SearchUserWidgetState.CLOSED -> {
                 Box(modifier = Modifier.background(Color.Transparent, shape = RectangleShape)) {
                     Row(
                         horizontalArrangement = Arrangement.End,
@@ -106,21 +104,22 @@ fun TopAppBar(
                         }
                     }
                 }
-            }
+
 
 //
 //            DefaultAppBar(
 //                onSearchClicked = onSearchTriggered
 //            )
-        }
-        SearchUserWidgetState.OPENED -> {
-            SearchUserAppBar(
-                text = searchTextState,
-                onTextChange = onTextChange,
-                onCloseClick = onCloseClicked,
-                onSearchClick = onSearchClicked,
-                modifier = Modifier
-            )
+            }
+            SearchUserWidgetState.OPENED -> {
+                SearchUserAppBar(
+                    text = searchTextState,
+                    onTextChange = onTextChange,
+                    onCloseClick = onCloseClicked,
+                    onSearchClick = onSearchClicked,
+                    modifier = Modifier
+                )
+            }
         }
     }
 }

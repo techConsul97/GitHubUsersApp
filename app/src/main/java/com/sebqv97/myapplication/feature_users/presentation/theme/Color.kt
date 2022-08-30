@@ -1,4 +1,4 @@
-package com.sebqv97.myapplication.ui.theme
+package com.sebqv97.myapplication.feature_users.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

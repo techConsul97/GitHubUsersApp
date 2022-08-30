@@ -33,6 +33,18 @@ class FakeUsersRepository : UsersRepository {
        _userDetailsTable.add(user)
     }
 
+    override suspend fun insertUserFromUserList(user: UserEntity) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteUserFromUserDetails(user: UserDetailsEntity) {
+        _userDetailsTable.remove(user)
+    }
+
+    override suspend fun deleteUserFromUserList(user: UserEntity) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insertUsers(users: List<UserEntity>) {
         for(user in users){
             _usersTable.add(user)
@@ -47,9 +59,6 @@ class FakeUsersRepository : UsersRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteUser(user: UserDetailsEntity) {
-        _userDetailsTable.remove(user)
-    }
 
     override suspend fun deleteUsers() {
        _usersTable.clear()

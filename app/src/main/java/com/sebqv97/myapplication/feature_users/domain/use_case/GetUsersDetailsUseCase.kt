@@ -5,6 +5,7 @@ import com.sebqv97.myapplication.core.util.Resource
 import com.sebqv97.myapplication.feature_users.data.repository.UsersRepositoryImpl
 import com.sebqv97.myapplication.feature_users.domain.model.UserDetailsItemModel
 import com.sebqv97.myapplication.feature_users.domain.repository.UsersRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -21,6 +22,7 @@ class GetUsersDetailsUseCase @Inject constructor(
         //call the api
         try {
             emit(Resource.Loading())
+            delay(500)
             val searchedUserResponse = usersRepository.getUser(searchedUsername)
             if(searchedUserResponse.isSuccessful){
 
@@ -36,7 +38,7 @@ class GetUsersDetailsUseCase @Inject constructor(
 
             }else{
                 usersRepository.readSpecificUser(searchedUsername).collect{ foundUser->
-                    if(foundUser.equals(null)){
+                    if(foundUser == null){
                         emit(Resource.Error<UserDetailsItemModel>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
                     }else{
                         emit(Resource.Success(foundUser.toUserDetailsItemModel()))
@@ -55,7 +57,7 @@ class GetUsersDetailsUseCase @Inject constructor(
 
         //Search it and retrieve it
         usersRepository.readSpecificUser(searchedUsername).collect{ foundUser->
-            if(foundUser.equals(null)){
+            if(foundUser == null){
                 emit(Resource.Error<UserDetailsItemModel>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
             }else{
                 emit(Resource.Success(foundUser.toUserDetailsItemModel()))

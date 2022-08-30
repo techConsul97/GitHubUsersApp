@@ -16,6 +16,6 @@ sealed class ErrorTypes {
     data class ApiQueryTypeError(val message: String = "Internal problem... Tell developer not to be one anymore =:)") :
         ErrorTypes()
 
-    data class DBInsertionSuccessRetrievingFailed(val message: String = "The insert of the word worked, but the retrieving from DB failed") :
+    data class DBInsertionSuccessRetrievingFailed(val message: String = "User is not present into the Database. Allow Internet Connection to refresh data") :
         ErrorTypes()
 }

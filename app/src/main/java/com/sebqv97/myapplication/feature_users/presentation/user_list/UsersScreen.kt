@@ -1,9 +1,6 @@
 package com.sebqv97.myapplication.feature_users.presentation.user_list.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
@@ -19,10 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sebqv97.myapplication.feature_users.presentation.Screens
+import com.sebqv97.myapplication.feature_users.presentation.TopBarScreen
 import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUseViewModel
 import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUserWidgetState
 import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListViewModel
 import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -33,46 +32,55 @@ fun UsersScreen(
     modifier: Modifier
 ) {
     val state = viewModel.state.value
+    var currentScreen = remember{searchBarViewModel.currentScreen.value}
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(12.dp)
-    ) {
-        LazyColumn(
-            modifier = modifier.fillMaxSize()
+
+    Column() {
+        TopBarScreen(modifier = modifier.padding(bottom = 40.dp))
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(12.dp)
         ) {
-            items(state.users) { user ->
-                UserLayout(
-                    user = user,
-                    onUserClicked = {
-                        searchBarViewModel.updateCurrentScreen(Screens.UserDetailScreen)
-                        searchBarViewModel.updateSearchWidgetState(SearchUserWidgetState.CLOSED)
-                        navController.navigate(Screens.UserDetailScreen.route + "/${user.username}")
-                    },
-                    onFavoriteClicked = {},//ToBeImplemented
-                    modifier = modifier
-                )
+            LazyColumn(
+                modifier = modifier.fillMaxSize()
+            ) {
+                items(state.users) { user ->
+                    UserLayout(
+                        user = user,
+                        onUserClicked = {
+                            searchBarViewModel.updateCurrentScreen(Screens.UserDetailScreen)
+                            currentScreen = Screens.UserDetailScreen
+                            searchBarViewModel.updateSearchWidgetState(SearchUserWidgetState.CLOSED)
+                            navController.navigate(Screens.UserDetailScreen.route + "/${user.username}")
+                        },
+                        onFavoriteClicked = {},//ToBeImplemented
+                        modifier = modifier
+                    )
+                }
             }
-        }
-        if (state.error != null) {
-            val errorMessage = getWordsUseCaseErrorHandler(state.error)
-            Text(
-                text = errorMessage,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colors.error,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .align(Alignment.Center)
-            )
+            if (state.error != null) {
+                val errorMessage = getWordsUseCaseErrorHandler(state.error)
+                Text(
+                    text = errorMessage,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colors.error,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .align(Alignment.Center)
+                )
+
+            }
+            if (state.isLoading) {
+                CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
+
+            }
+
 
         }
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
-        }
-
-
     }
+
+
 
 }

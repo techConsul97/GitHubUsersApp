@@ -1,11 +1,16 @@
 package com.sebqv97.myapplication.feature_users.presentation.user_details
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -34,87 +39,92 @@ fun UserDetailsScreen(
     searchUseViewModel: SearchUseViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-    state.user?.let { user ->
+    val screen = searchUseViewModel.currentScreen.value
+    if (state.user != null) {
+        state.user.let { user ->
 
-            Scaffold(backgroundColor = Color.Transparent,
-                topBar = {
-                    if(searchUseViewModel.currentScreen.value == Screens.UserDetailScreen){
-                        UserAppBar(
+            Column {
+
+                UserAppBar(
                             modifier = modifier,
-                            navController = navController,
-                            user = user
-                        )
-                    }
+                    navController = navController
 
-                },
-                content = {
-                    Column {
-
-
-                        UserOverview(modifier = modifier.padding(bottom = 12.dp), user = user)
-                        UserReposAndIdElement(modifier = modifier.padding(bottom = 6.dp), user = user)
-                        UserFollowersComponent(modifier = modifier, user = user)
-                    }
-                    if (state.error != null) {
-                        val errorMessage = getWordsUseCaseErrorHandler(state.error)
-                        Text(
-                            text = errorMessage,
-                            color = MaterialTheme.colors.error,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp)
-
-                        )
-                    }
-                    if (state.isLoading) {
-                        CircularProgressIndicator()
-                    }
+                )
+                UserOverview(modifier = modifier.padding(bottom = 12.dp), user = user)
+                UserReposAndIdElement(modifier = modifier.padding(bottom = 6.dp), user = user)
+                UserFollowersComponent(modifier = modifier, user = user)
+            }
 
 
-                }
-
-            )
         }
+    } else {
+        UserAppBar(
+            modifier = modifier,
+            navController = navController
+
+        )
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Center) {
+            Column() {
+
+            }
+            if (state.error != null) {
+
+                val errorMessage = getWordsUseCaseErrorHandler(state.error).uppercase()
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colors.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+
+                )
+            }
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            }
+
+
+        }
+    }
 
 
 }
 
 
 @Composable
-fun UserAppBar(modifier: Modifier, user: UserDetailsItemModel, navController: NavController) {
+fun UserAppBar(modifier: Modifier, navController: NavController) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.padding(horizontal = 8.dp)
+        modifier = modifier
+            .background(color = MaterialTheme.colors.primaryVariant)
+            .fillMaxWidth()
     ) {
         IconButton(onClick = { navController.navigate(Screens.UsersScreen.route) }) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Go back to Main Screen Icon",
-                tint = Color.White
+                tint = Color.White,
+                modifier = modifier.align(CenterVertically)
             )
 
         }
-        Text(text = "Profile", color = Color.White, fontWeight = FontWeight.W600, fontSize = 14.sp)
-        if (user.hireable != null) {
-            if (user.hireable) {
-                Text(
-                    text = "Seeking Jobs",
-                    color = Color.White,
-                    fontWeight = FontWeight.W200,
-                    fontSize = 12.sp
-                )
+        Text(
+            text = "Profile",
+            color = Color.White,
+            fontWeight = FontWeight.W700,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = modifier
+                .align(CenterVertically)
+                .padding(end = 6.dp)
+        )
 
-            } else {
-                Text(
-                    text = "Not Seeking Jobs",
-                    color = Color.White,
-                    fontWeight = FontWeight.W200,
-                    fontSize = 12.sp
-                )
-            }
-        }
+
+
+
 
     }
 
 }
+

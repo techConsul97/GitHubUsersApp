@@ -46,7 +46,7 @@ class UsersRepositoryImpl @Inject constructor(
         usersDao.deleteOneUserUserList(user)
     }
 
-    override fun readSpecificUser(searchedUsername: String): Flow<UserDetailsEntity> {
+    override fun readSpecificUser(searchedUsername: String): Flow<UserDetailsEntity?> {
        return usersDao.getSpecificUser(searchedUsername)
     }
 

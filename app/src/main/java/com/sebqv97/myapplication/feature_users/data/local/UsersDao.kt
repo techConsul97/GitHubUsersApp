@@ -39,7 +39,7 @@ interface UsersDao {
     suspend fun insertOne(user: UserDetailsEntity)
 
    @Query("SELECT * FROM USER_DETAILS WHERE username LIKE :searchedUser")
-    fun getSpecificUser(searchedUser: String):Flow<UserDetailsEntity>
+    fun getSpecificUser(searchedUser: String):Flow<UserDetailsEntity?>
 
 
 }

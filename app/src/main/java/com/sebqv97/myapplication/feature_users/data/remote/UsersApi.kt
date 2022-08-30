@@ -13,7 +13,10 @@ interface UsersApi {
     @GET(GET_USERS_ENDPOINT)
     suspend fun getAllData(): List<ListUsersDto>
 
-    @Headers("Accept:application/vnd.github+json")
+    @Headers(
+        "Accept:application/vnd.github+json",
+        "Authorization: Bearer $API_KEY"
+    )
     @GET("$GET_USERS_ENDPOINT/{specificUser}")
     suspend fun getDataFromPath (@Path("specificUser") specificUser:String):Response<UserDetailsDto>
 

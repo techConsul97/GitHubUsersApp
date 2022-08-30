@@ -12,7 +12,7 @@ interface UsersRepository {
 
     fun readUsers(): Flow<List<UserEntity>>
     fun readUser(searchedUsername: String):Flow<UserEntity>
-    fun readSpecificUser(searchedUsername: String):Flow<UserDetailsEntity>
+    fun readSpecificUser(searchedUsername: String):Flow<UserDetailsEntity?>
 
     suspend fun insertUserFromUserList(user: UserEntity)
     suspend fun insertUser(user:UserDetailsEntity)

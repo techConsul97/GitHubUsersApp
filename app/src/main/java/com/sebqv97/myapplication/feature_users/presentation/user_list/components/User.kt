@@ -49,7 +49,8 @@ import com.sebqv97.myapplication.feature_users.presentation.add_favorite.AddFavo
             modifier = modifier
                 .fillMaxWidth()
                 .padding(vertical = 6.dp)
-                .heightIn(100.dp),
+                .heightIn(100.dp)
+                .clickable { onUserClicked(user) },
             border = BorderStroke(1.dp, Color.LightGray),
             elevation = 8.dp
         ) {
@@ -61,7 +62,6 @@ import com.sebqv97.myapplication.feature_users.presentation.add_favorite.AddFavo
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = modifier.clickable { onUserClicked(user) }
                     ) {
 
                         AsyncImage(
