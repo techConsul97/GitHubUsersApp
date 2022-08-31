@@ -3,6 +3,7 @@ package com.sebqv97.myapplication.feature_users.data.repository
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserDetailsEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserEntity
 import com.sebqv97.myapplication.feature_users.data.remote.dto.ListUsersDto
+import com.sebqv97.myapplication.feature_users.data.remote.dto.SearchUsersDto
 import com.sebqv97.myapplication.feature_users.data.remote.dto.UserDetailsDto
 import com.sebqv97.myapplication.feature_users.domain.repository.UsersRepository
 import kotlinx.coroutines.flow.Flow
@@ -62,5 +63,9 @@ class FakeUsersRepository : UsersRepository {
 
     override suspend fun deleteUsers() {
        _usersTable.clear()
+    }
+
+    override suspend fun searchUsersByQuery(givenQuery: String): Response<SearchUsersDto> {
+        TODO("Not yet implemented")
     }
 }
