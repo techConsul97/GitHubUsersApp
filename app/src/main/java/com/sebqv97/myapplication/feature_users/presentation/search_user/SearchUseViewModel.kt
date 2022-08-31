@@ -35,8 +35,8 @@ class SearchUseViewModel @Inject constructor(
         mutableStateOf(value = "")
     val searchUserTextState get()= _searchUserTextState
 
-    private val _state :MutableState<SearchUserState> = mutableStateOf(value = SearchUserState())
-    val searchUserState:State<SearchUserState> get() = _state
+    private val _foundUsersState = mutableStateOf(SearchUserState())
+    val foundUsersState: State<SearchUserState> =_foundUsersState
 
 
     fun updateSearchWidgetState(newValue: SearchUserWidgetState){
@@ -57,19 +57,22 @@ class SearchUseViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         result.data?.let {
-                            _state.value = SearchUserState(foundUsers = it.users, totalUsersFound = it.totalUsersCount)
+                            _foundUsersState.value = SearchUserState(foundUsers = it.users, totalUsersFound = it.totalUsersCount)
+                            Log.d("State: ",_foundUsersState.value.toString())
                         }
 
                     }
                     is Resource.Error -> {
                         result.errorType?.let {
-                            _state.value = SearchUserState(error = it)
+                            _foundUsersState.value = SearchUserState(error = it)
+                            Log.d("State: ",_foundUsersState.value.toString())
                         }
 
 
                     }
                     is Resource.Loading -> {
-                        _state.value = SearchUserState(isLoading = true)
+                        _foundUsersState.value = SearchUserState(isLoading = true)
+                        Log.d("State: ",_foundUsersState.value.toString())
 
                     }
                 }

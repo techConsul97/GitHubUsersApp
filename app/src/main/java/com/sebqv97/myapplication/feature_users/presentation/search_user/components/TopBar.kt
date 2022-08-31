@@ -14,11 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.sebqv97.myapplication.feature_users.presentation.user_list.components.SearchUserAppBar
 
 
 @Composable
-fun TopBarScreen(searchUseViewModel: SearchUseViewModel = hiltViewModel(), modifier: Modifier) {
+fun TopBarScreen(
+    searchUseViewModel: SearchUseViewModel,
+    modifier: Modifier,
+    navController: NavController,
+) {
 
     val searchWidgetState by searchUseViewModel.searchWidgetState
     val searchUserTextState by searchUseViewModel.searchUserTextState
@@ -40,7 +45,8 @@ fun TopBarScreen(searchUseViewModel: SearchUseViewModel = hiltViewModel(), modif
         },
         onSearchTriggered = {
             searchUseViewModel.updateSearchWidgetState(newValue = SearchUserWidgetState.OPENED)
-        }
+        },
+        navController = navController
     )
 
 }
@@ -76,7 +82,7 @@ fun TopAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
     onSearchTriggered: () -> Unit,
-    viewModel: SearchUseViewModel = hiltViewModel()
+    navController: NavController
 ) {
 
 
@@ -106,7 +112,8 @@ fun TopAppBar(
                 onTextChange = onTextChange,
                 onCloseClick = onCloseClicked,
                 onSearchClick = onSearchClicked,
-                modifier = Modifier
+                modifier = Modifier,
+                navController = navController
             )
         }
     }

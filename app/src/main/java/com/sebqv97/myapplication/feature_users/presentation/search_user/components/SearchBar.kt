@@ -12,6 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -19,7 +22,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.sebqv97.myapplication.R
+import com.sebqv97.myapplication.feature_users.presentation.Screens
 import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListViewModel
 
 
@@ -31,6 +36,7 @@ import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListVi
         onTextChange:(String)->Unit,
         onCloseClick:()->Unit,
         onSearchClick:(String)->Unit,
+        navController: NavController
     ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -43,7 +49,6 @@ import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListVi
 
         ) {
             TextField(
-                modifier = modifier.fillMaxWidth(),
                 value = text,
                 onValueChange = {onTextChange(it)},
                 placeholder = {
@@ -86,30 +91,25 @@ import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListVi
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         keyboardController?.hide()
+
+
+                        navController.navigate(Screens.SearchUsersScreen.route)
                         onSearchClick(text)
+
                     },
                 ),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     cursorColor = Color.DarkGray.copy(alpha = ContentAlpha.medium)
-                )
+                ),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester = FocusRequester())
+                    //.onFocusChanged { navController.navigate(Screens.SearchUsersScreen.route) },
 
             )
 
         }
 
-    }
-
-    @Preview
-    @Composable
-    fun SearchUserAppBarPreview() {
-        SearchUserAppBar(
-            modifier = Modifier,
-            text = "Text username",
-            onTextChange = {},
-            onCloseClick =  {},
-            onSearchClick = {}
-        )
-        
     }
 

@@ -12,19 +12,22 @@ import retrofit2.http.Query
 
 
 interface UsersApi {
-    @Headers("Accept:application/vnd.github+json")
+    @Headers(
+        "Accept:application/vnd.github+json",
+        "Authorization: Bearer $API_KEY"
+    )
     @GET(GET_USERS_ENDPOINT)
     suspend fun getAllData(): List<ListUsersDto>
 
     @Headers(
-        "Accept: application/vnd.github+json",
+        "Accept:application/vnd.github+json",
         "Authorization: Bearer $API_KEY"
     )
     @GET("$GET_USERS_ENDPOINT/{specificUser}")
     suspend fun getDataFromPath (@Path("specificUser") specificUser:String):Response<UserDetailsDto>
 
     @Headers(
-        "Accept: application/vnd.github+json",
+        "Accept:application/vnd.github+json",
         "Authorization: Bearer $API_KEY"
     )
     @GET(SEARCH_USERS_ENDPOINT)
@@ -39,6 +42,6 @@ interface UsersApi {
         const val BASE_URL = " https://api.github.com/"
         const val GET_USERS_ENDPOINT = "users"
         const val SEARCH_USERS_ENDPOINT = "search/users"
-        const val API_KEY = "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"
+        const val API_KEY = "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"
     }
 }

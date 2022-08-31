@@ -14,6 +14,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUseViewModel
+import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUsersScreen
 import com.sebqv97.myapplication.feature_users.presentation.search_user.TopBarScreen
 import com.sebqv97.myapplication.feature_users.presentation.user_details.UserDetailsScreen
 import com.sebqv97.myapplication.feature_users.presentation.user_list.components.UsersScreen
@@ -28,6 +30,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+            val searchUseViewModel:SearchUseViewModel = hiltViewModel()
             MyApplicationTheme {
                 Scaffold(
                 content = {
@@ -45,10 +48,14 @@ class MainActivity : ComponentActivity() {
                                 UsersScreen(
                                     modifier = Modifier,
                                     navController = navController,
+                                    searchBarViewModel = searchUseViewModel
                                 )
                             }
                             composable(route = Screens.UserDetailScreen.route + "/{username}") {
                                 UserDetailsScreen(modifier = Modifier, navController = navController)
+                            }
+                            composable(route = Screens.SearchUsersScreen.route){
+                                SearchUsersScreen(navController = navController, modifier = Modifier, viewModel = hiltViewModel())
                             }
                         }
                     } })
@@ -66,9 +73,11 @@ class MainActivity : ComponentActivity() {
     @Preview
     fun DefaultPreview() {
         MyApplicationTheme {
+            val navController = rememberNavController()
+            val searchUserViewModel : SearchUseViewModel= hiltViewModel()
             Scaffold(
                 topBar = {
-                    TopBarScreen(searchUseViewModel = hiltViewModel(), modifier = Modifier)
+                    TopBarScreen(searchUseViewModel = searchUserViewModel, modifier = Modifier, navController = navController)
                 })
             {
 
@@ -78,7 +87,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController = rememberNavController()
+
                     NavHost(
                         navController = navController,
                         startDestination = Screens.UsersScreen.route
@@ -87,11 +96,15 @@ class MainActivity : ComponentActivity() {
                             UsersScreen(
                                 modifier = Modifier,
                                 navController = navController,
-                                viewModel = hiltViewModel()
+                                viewModel = hiltViewModel(),
+                                searchBarViewModel = searchUserViewModel
                             )
                         }
                         composable(route = Screens.UserDetailScreen.route + "/{username}") {
                             UserDetailsScreen(modifier = Modifier, navController = navController)
+                        }
+                        composable(route = Screens.SearchUsersScreen.route){
+                            SearchUsersScreen(navController = navController, modifier = Modifier, viewModel = hiltViewModel())
                         }
                     }
                 }

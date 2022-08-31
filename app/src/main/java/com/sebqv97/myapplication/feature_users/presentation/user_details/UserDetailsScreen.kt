@@ -36,7 +36,7 @@ fun UserDetailsScreen(
     modifier: Modifier,
     navController: NavController,
     viewModel: UserDetailsViewModel = hiltViewModel(),
-    searchUseViewModel: SearchUseViewModel = hiltViewModel()
+
 ) {
     val state = viewModel.state.value
 
