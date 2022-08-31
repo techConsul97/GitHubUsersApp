@@ -39,7 +39,7 @@ fun UserDetailsScreen(
     searchUseViewModel: SearchUseViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-    val screen = searchUseViewModel.currentScreen.value
+
     if (state.user != null) {
         state.user.let { user ->
 

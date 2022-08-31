@@ -4,6 +4,7 @@ import com.sebqv97.myapplication.core.util.ErrorTypes
 import com.sebqv97.myapplication.core.util.Resource
 import com.sebqv97.myapplication.feature_users.domain.model.UserItemModel
 import com.sebqv97.myapplication.feature_users.domain.repository.UsersRepository
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -19,26 +20,36 @@ class GetUsersUseCase @Inject constructor(
 
         //call the api
         try {
-            emit(Resource.Loading())
-            delay(500)
-            val usersResponseList = usersRepository.getUsers()
-            if (usersResponseList.isEmpty()) {
-                emit(Resource.Error<List<UserItemModel>>(ErrorTypes.ApiQueryTypeError()))
-            } else {
-                val usersListEntity = usersResponseList.map { it.toUserEntity() }
-                //insert into the database
-                usersRepository.deleteUsers()
-                usersRepository.insertUsers(usersListEntity)
+
+            coroutineScope {
+                emit(Resource.Loading())
+                delay(500)
+                val usersResponseList = usersRepository.getUsers()
+                if (usersResponseList.isEmpty()) {
+                    emit(Resource.Error<List<UserItemModel>>(ErrorTypes.ApiQueryTypeError()))
+                } else {
+                    val usersListEntity = usersResponseList.map { it.toUserEntity() }
+                    //insert into the database
+                    usersRepository.deleteUsers()
+                    usersRepository.insertUsers(usersListEntity)
+            }
+
 
 
             }
         } catch (e: HttpException) {
             val httpErrorCode = e.code()
-            emit(Resource.Error(ErrorTypes.ProblematicHttpRequest(httpErrorCode)))
-            delay(500)
+            coroutineScope {
+                emit(Resource.Error(ErrorTypes.ProblematicHttpRequest(httpErrorCode)))
+                delay(500)
+            }
+
         } catch (e: IOException) {
-            emit((Resource.Error(ErrorTypes.InternetConnectionFailed())))
-            delay(500)
+            coroutineScope {
+                emit((Resource.Error(ErrorTypes.InternetConnectionFailed())))
+                delay(500)
+            }
+
         }
         //get data from db after it was inserted
 

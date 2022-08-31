@@ -28,5 +28,5 @@ object DomainLayerModule {
     fun provideFavoriteUserUerCase(repository: UsersRepository):FavoriteUserUseCase = FavoriteUserUseCase(repository)
 
     @Provides
-    fun provideSearchUserUseCase(usersDetailsUseCase: GetUsersDetailsUseCase):FetchUserUseCase = FetchUserUseCase(usersDetailsUseCase)
+    fun provideSearchUserUseCase(repository: UsersRepository):FetchUserUseCase = FetchUserUseCase(repository)
 }

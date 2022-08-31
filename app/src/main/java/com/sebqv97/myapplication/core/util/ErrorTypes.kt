@@ -18,4 +18,6 @@ sealed class ErrorTypes {
 
     data class DBInsertionSuccessRetrievingFailed(val message: String = "User is not present into the Database. Allow Internet Connection to refresh data") :
         ErrorTypes()
+
+    data class JobCancellationError(val message: String = "There was a problem with cancelling the job"):ErrorTypes()
 }

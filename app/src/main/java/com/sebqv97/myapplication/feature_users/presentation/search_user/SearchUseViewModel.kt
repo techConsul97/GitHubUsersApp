@@ -13,6 +13,7 @@ import com.sebqv97.myapplication.feature_users.presentation.user_list.UsersListS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,9 +25,7 @@ class SearchUseViewModel @Inject constructor(
 
 ):ViewModel() {
 
-    private val _currentScreen:MutableState<Screens> =
-        mutableStateOf(value = Screens.UsersScreen)
-    val currentScreen: State<Screens> get()= _currentScreen
+
 
     private val _searchWidgetState:MutableState<SearchUserWidgetState> =
         mutableStateOf(value = SearchUserWidgetState.CLOSED)
@@ -35,6 +34,9 @@ class SearchUseViewModel @Inject constructor(
     private val _searchUserTextState:MutableState<String> =
         mutableStateOf(value = "")
     val searchUserTextState get()= _searchUserTextState
+
+    private val _state :MutableState<SearchUserState> = mutableStateOf(value = SearchUserState())
+    val searchUserState:State<SearchUserState> get() = _state
 
 
     fun updateSearchWidgetState(newValue: SearchUserWidgetState){
@@ -45,34 +47,37 @@ class SearchUseViewModel @Inject constructor(
         _searchUserTextState.value = newTextValue
     }
 
-    fun updateCurrentScreen(newValue: Screens){
-        _currentScreen.value = newValue
-    }
 
-//    fun getUserByUsername(searchedUserByUsername: String?) {
-//        viewModelScope.launch {
-//            fetchUserUseCase(searchedUserByUsername).collect { result ->
-//                when (result) {
-//                    is Resource.Success -> {
-//                        _state.value = UsersListState(users = listOf(result.data!!))
-//                        this.coroutineContext.cancel()
-//                        Log.d("state",_state.value.toString())
-//
-//                    }
-//                    is Resource.Error -> {
-//                        _state.value = UsersListState(error = result.errorType)
-//                        this.coroutineContext.cancel()
-//                    }
-//                    is Resource.Loading -> {
-//                        _state.value = UsersListState(isLoading = true)
-//                        this.coroutineContext.cancel()
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//    }
+
+
+
+    fun getUserByUsername(searchedUserByUsername: String?) {
+        viewModelScope.launch {
+            fetchUserUseCase(searchedUserByUsername).onEach{ result ->
+                when (result) {
+                    is Resource.Success -> {
+                        result.data?.let {
+                            _state.value = SearchUserState(foundUsers = it.users, totalUsersFound = it.totalUsersCount)
+                        }
+
+                    }
+                    is Resource.Error -> {
+                        result.errorType?.let {
+                            _state.value = SearchUserState(error = it)
+                        }
+
+
+                    }
+                    is Resource.Loading -> {
+                        _state.value = SearchUserState(isLoading = true)
+
+                    }
+                }
+
+            }.launchIn(viewModelScope)
+        }
+
+    }
 
 
 }

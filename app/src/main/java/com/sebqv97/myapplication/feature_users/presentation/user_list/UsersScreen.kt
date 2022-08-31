@@ -7,8 +7,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -16,12 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sebqv97.myapplication.feature_users.presentation.Screens
-import com.sebqv97.myapplication.feature_users.presentation.TopBarScreen
+import com.sebqv97.myapplication.feature_users.presentation.search_user.TopBarScreen
 import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUseViewModel
 import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUserWidgetState
 import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListViewModel
 import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
-import kotlinx.coroutines.delay
 
 
 @Composable
@@ -32,7 +29,7 @@ fun UsersScreen(
     modifier: Modifier
 ) {
     val state = viewModel.state.value
-    var currentScreen = remember{searchBarViewModel.currentScreen.value}
+
 
 
     Column() {
@@ -49,8 +46,7 @@ fun UsersScreen(
                     UserLayout(
                         user = user,
                         onUserClicked = {
-                            searchBarViewModel.updateCurrentScreen(Screens.UserDetailScreen)
-                            currentScreen = Screens.UserDetailScreen
+
                             searchBarViewModel.updateSearchWidgetState(SearchUserWidgetState.CLOSED)
                             navController.navigate(Screens.UserDetailScreen.route + "/${user.username}")
                         },

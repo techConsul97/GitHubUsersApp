@@ -1,7 +1,5 @@
-package com.sebqv97.myapplication.feature_users.presentation
+package com.sebqv97.myapplication.feature_users.presentation.search_user
 
-import android.transition.Scene
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,40 +13,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUseViewModel
-import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUserWidgetState
-import com.sebqv97.myapplication.feature_users.presentation.user_list.UserListViewModel
 import com.sebqv97.myapplication.feature_users.presentation.user_list.components.SearchUserAppBar
 
 
 @Composable
-fun TopBarScreen(searchUseViewModel: SearchUseViewModel = hiltViewModel(),modifier: Modifier){
+fun TopBarScreen(searchUseViewModel: SearchUseViewModel = hiltViewModel(), modifier: Modifier) {
 
     val searchWidgetState by searchUseViewModel.searchWidgetState
     val searchUserTextState by searchUseViewModel.searchUserTextState
 
-        TopAppBar(
-            searchWidgetState = searchWidgetState,
-            searchTextState = searchUserTextState,
-            onTextChange = {
-                           searchUseViewModel.updateSearchUserTextState(newTextValue = it)
-            },
-            onCloseClicked = {
-                            searchUseViewModel.updateSearchWidgetState(newValue = SearchUserWidgetState.CLOSED)
+    TopAppBar(
+        searchWidgetState = searchWidgetState,
+        searchTextState = searchUserTextState,
+        onTextChange = {
+            searchUseViewModel.updateSearchUserTextState(newTextValue = it)
+        },
+        onCloseClicked = {
+            searchUseViewModel.updateSearchWidgetState(newValue = SearchUserWidgetState.CLOSED)
 
-            },
-            onSearchClicked = {
-                Log.d("Searched Username: ", it)
-              //  userListViewModel.getUserByUsername(it)
+        },
+        onSearchClicked = {
 
-            },
-            onSearchTriggered = {
-                searchUseViewModel.updateSearchWidgetState(newValue = SearchUserWidgetState.OPENED)
-            }
-        )
+            searchUseViewModel.getUserByUsername(it)
+
+        },
+        onSearchTriggered = {
+            searchUseViewModel.updateSearchWidgetState(newValue = SearchUserWidgetState.OPENED)
+        }
+    )
 
 }
 
@@ -85,42 +78,38 @@ fun TopAppBar(
     onSearchTriggered: () -> Unit,
     viewModel: SearchUseViewModel = hiltViewModel()
 ) {
-    val currentScreen = viewModel.currentScreen.value
-    if (currentScreen == Screens.UsersScreen) {
-        when (searchWidgetState) {
-            SearchUserWidgetState.CLOSED -> {
-                Box(modifier = Modifier.background(Color.Transparent, shape = RectangleShape)) {
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
 
-                        IconButton(onClick = { onSearchTriggered() }) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Trigger Search"
-                            )
 
-                        }
+    when (searchWidgetState) {
+        SearchUserWidgetState.CLOSED -> {
+            Box(modifier = Modifier.background(Color.Transparent, shape = RectangleShape)) {
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    IconButton(onClick = { onSearchTriggered() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Trigger Search"
+                        )
+
                     }
                 }
+            }
 
 
-//
-//            DefaultAppBar(
-//                onSearchClicked = onSearchTriggered
-//            )
-            }
-            SearchUserWidgetState.OPENED -> {
-                SearchUserAppBar(
-                    text = searchTextState,
-                    onTextChange = onTextChange,
-                    onCloseClick = onCloseClicked,
-                    onSearchClick = onSearchClicked,
-                    modifier = Modifier
-                )
-            }
+        }
+        SearchUserWidgetState.OPENED -> {
+            SearchUserAppBar(
+                text = searchTextState,
+                onTextChange = onTextChange,
+                onCloseClick = onCloseClicked,
+                onSearchClick = onSearchClicked,
+                modifier = Modifier
+            )
         }
     }
 }
+
 

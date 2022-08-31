@@ -6,6 +6,7 @@ import com.sebqv97.myapplication.feature_users.data.local.entity.UserDetailsEnti
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserEntity
 import com.sebqv97.myapplication.feature_users.data.remote.UsersApi
 import com.sebqv97.myapplication.feature_users.data.remote.dto.ListUsersDto
+import com.sebqv97.myapplication.feature_users.data.remote.dto.SearchUsersDto
 import com.sebqv97.myapplication.feature_users.data.remote.dto.UserDetailsDto
 import com.sebqv97.myapplication.feature_users.domain.repository.UsersRepository
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +33,10 @@ class UsersRepositoryImpl @Inject constructor(
 
     override suspend fun deleteUsers() {
         usersDao.deleteAll()
+    }
+
+    override suspend fun searchUsersByQuery(givenQuery: String): Response<SearchUsersDto> {
+        return usersApi.searchUsersBasedOnQuery(givenQuery)
     }
 
     override suspend fun insertUserFromUserList(user: UserEntity) {
