@@ -1,7 +1,7 @@
 package com.sebqv97.myapplication.feature_users.data.repository
 
-import android.util.Log
 import com.sebqv97.myapplication.feature_users.data.local.UsersDao
+import com.sebqv97.myapplication.feature_users.data.local.entity.FavoriteUsersEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserDetailsEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserEntity
 import com.sebqv97.myapplication.feature_users.data.remote.UsersApi
@@ -30,6 +30,18 @@ class UsersRepositoryImpl @Inject constructor(
         usersDao.deleteAll()
     }
 
+    override suspend fun insertFavoriteUser(user: FavoriteUsersEntity) {
+        usersDao.insertFavoriteUser(user)
+    }
+
+    override suspend fun deleteFavoriteUser(user: FavoriteUsersEntity) {
+        usersDao.deleteFavoriteUser(user)
+    }
+
+    override fun getFavoriteUsers(): Flow<List<FavoriteUsersEntity>> {
+        return usersDao.getFavoriteUsers()
+    }
+
     override suspend fun deleteUser(user:UserDetailsEntity) {
         usersDao.deleteOne(user)
 
@@ -53,5 +65,9 @@ class UsersRepositoryImpl @Inject constructor(
 
     override fun readUser(searchedUsername: String): Flow<UserEntity>{
         return usersDao.getUser(searchedUsername)
+    }
+
+    override fun getFavoriteUserByUsername(username:String): Flow<FavoriteUsersEntity?> {
+        return usersDao.getUserByUsername(username)
     }
 }

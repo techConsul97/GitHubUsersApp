@@ -9,6 +9,5 @@ data class FavoriteUsersEntity(
     @PrimaryKey(autoGenerate = false)
     val username: String,
     val avatarUrl: String?,
-    val id: Int?,
-
+    val id: Int?
 )

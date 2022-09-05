@@ -1,6 +1,7 @@
 package com.sebqv97.myapplication.feature_users.data.local
 
 import androidx.room.*
+import com.sebqv97.myapplication.feature_users.data.local.entity.FavoriteUsersEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserDetailsEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserEntity
 import kotlinx.coroutines.flow.Flow
@@ -24,8 +25,6 @@ interface UsersDao {
     fun getUser(searchedUserName:String):Flow<UserEntity>
 
 
-
-
     @Delete
     suspend fun deleteOne(user:UserDetailsEntity)
 
@@ -35,5 +34,18 @@ interface UsersDao {
    @Query("SELECT * FROM USER_DETAILS WHERE username LIKE :searchedUser")
     fun getSpecificUser(searchedUser: String):Flow<UserDetailsEntity>
 
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFavoriteUser(favoriteUsersEntity: FavoriteUsersEntity)
+
+    @Delete
+    suspend fun deleteFavoriteUser(favoriteUsersEntity: FavoriteUsersEntity)
+
+    @Query("SELECT * FROM favorites_users")
+    fun getFavoriteUsers():Flow<List<FavoriteUsersEntity>>
+
+    @Query("SELECT * FROM favorites_users WHERE username LIKE :searchedName")
+    fun getUserByUsername(searchedName:String):Flow<FavoriteUsersEntity?>
 
 }

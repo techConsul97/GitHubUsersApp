@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sebqv97.myapplication.core.util.ResultState
+import com.sebqv97.myapplication.feature_users.domain.model.UserItemModel
+import com.sebqv97.myapplication.feature_users.domain.use_case.FavoriteUserUseCase
 import com.sebqv97.myapplication.feature_users.domain.use_case.FetchUserUseCase
 import com.sebqv97.myapplication.feature_users.domain.use_case.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UserListViewModel @Inject constructor(
     private val fetchUserUseCase: FetchUserUseCase,
-    private val getUsersUseCase: GetUsersUseCase
+    private val getUsersUseCase: GetUsersUseCase,
+    private val favoriteUserUseCase: FavoriteUserUseCase
 
 ) : ViewModel() {
 
@@ -32,7 +35,12 @@ class UserListViewModel @Inject constructor(
         getUsersUseCase().onEach { result ->
             when (result) {
                 is ResultState.Success -> {
-                    _state.value = UsersListState(users = result.data!!)
+                    result.data!!.forEach {
+                        if(checkUserIsFavorite(it.username!!)){
+                            it.isFavorite = true
+                        }
+                    }
+                    _state.value = UsersListState(users = result.data)
 
                 }
                 is ResultState.Error -> {
@@ -70,4 +78,28 @@ class UserListViewModel @Inject constructor(
         }
 
     }
+
+    fun markUserAsFavorite(user:UserItemModel){
+        viewModelScope.launch{
+            favoriteUserUseCase.insertFavoriteUser(user)
+        }
+
+    }
+
+    fun unmarkUserFromFavorite(user:UserItemModel){
+        viewModelScope.launch {
+            favoriteUserUseCase.deleteFavoriteUser(user)
+        }
+    }
+
+    fun checkUserIsFavorite(username:String):Boolean{
+        var appears = false
+        viewModelScope.launch{
+           appears= favoriteUserUseCase.checkUserIsInFavorite(username).first() != null
+
+        }
+        return appears
+    }
+
+
 }

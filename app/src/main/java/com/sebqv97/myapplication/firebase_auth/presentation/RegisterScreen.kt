@@ -34,6 +34,8 @@ import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
 import com.sebqv97.myapplication.firebase_auth.data.model.AuthUser
 import com.sebqv97.myapplication.firebase_auth.presentation.component.TextInput
 import com.sebqv97.myapplication.firebase_auth.presentation.util.InputType
+import com.sebqv97.myapplication.firebase_auth.util.emailValidator
+import com.sebqv97.myapplication.firebase_auth.util.passwordValidator
 
 
 @Destination
@@ -53,9 +55,9 @@ fun RegisterScreen(
     val context = LocalContext.current
     val user by viewModel.authState
 
-    if(user.user != null){
+    if (user.user != null) {
         navigator.navigate(UsersScreenDestination)
-    }else {
+    } else {
 
 
         Column(
@@ -91,19 +93,38 @@ fun RegisterScreen(
                 getValue = { password.value = it },
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
-                    viewModel.createUserWithCredentials(AuthUser(email.value, password.value))
+                    val emailValidation = emailValidator(email.value)
+                    val passwordValidation = passwordValidator(password.value)
+                    if (emailValidation == null) {
+                        if (passwordValidation == null) {
+                            viewModel.createUserWithCredentials(AuthUser(email.value, password.value))
+                        } else {
+                            Toast.makeText(context, passwordValidation, Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, emailValidation, Toast.LENGTH_SHORT).show()
+                    }
+
                 }),
                 focusRequester = passwordFocusRequester
             )
 
 
             Button(onClick = {
-                viewModel.createUserWithCredentials(
-                    AuthUser(
-                        email.value,
-                        password.value
-                    )
-                )
+
+                val emailValidation = emailValidator(email.value)
+                val passwordValidation = passwordValidator(password.value)
+                if (emailValidation == null) {
+                    if (passwordValidation == null) {
+                        viewModel.createUserWithCredentials(AuthUser(email.value, password.value))
+                    } else {
+                        Toast.makeText(context, passwordValidation, Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, emailValidation, Toast.LENGTH_SHORT).show()
+                }
+
+
             }, modifier = modifier.fillMaxWidth()) {
                 Text(text = "REGISTER", modifier = modifier.padding(vertical = 8.dp))
             }
@@ -124,9 +145,9 @@ fun RegisterScreen(
             }
 
         }
-        if(user.encounteredError != null){
+        if (user.encounteredError != null) {
             val errorMessage = getWordsUseCaseErrorHandler(user.encounteredError!!)
-            Toast.makeText(context,errorMessage,Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.sebqv97.myapplication.feature_users.domain.repository
 
+import com.sebqv97.myapplication.feature_users.data.local.entity.FavoriteUsersEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserDetailsEntity
 import com.sebqv97.myapplication.feature_users.data.local.entity.UserEntity
 import com.sebqv97.myapplication.feature_users.data.remote.dto.ListUsersDto
@@ -23,6 +24,11 @@ interface UsersRepository {
 
     suspend fun deleteUser(user:UserDetailsEntity)
     suspend fun deleteUsers()
+
+    suspend fun insertFavoriteUser(user:FavoriteUsersEntity)
+    suspend fun deleteFavoriteUser(user:FavoriteUsersEntity)
+     fun getFavoriteUsers():Flow<List<FavoriteUsersEntity>>
+     fun getFavoriteUserByUsername(username:String):Flow<FavoriteUsersEntity?>
 
 
 

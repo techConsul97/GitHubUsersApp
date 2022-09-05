@@ -37,6 +37,7 @@ import com.sebqv97.myapplication.R
         onFavoriteClicked: (UserItemModel)->Unit,
         onUserClicked:(UserItemModel) -> Unit
     ){
+        val tintColor = if(user.isFavorite) Color.Red else Color.Black
         Surface(
             modifier = modifier
                 .fillMaxWidth()
@@ -81,11 +82,12 @@ import com.sebqv97.myapplication.R
                 }
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { onFavoriteClicked(user) },
                     modifier = modifier.padding(end = 16.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
+                        tint = tintColor,
                         contentDescription ="Add favorite"
                     )
 

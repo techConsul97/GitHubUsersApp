@@ -1,6 +1,5 @@
 package com.sebqv97.myapplication.firebase_auth.presentation
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
@@ -34,10 +33,11 @@ import com.sebqv97.myapplication.feature_users.presentation.ui.theme.Shapes
 import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
 import com.sebqv97.myapplication.firebase_auth.data.model.AuthUser
 import com.sebqv97.myapplication.firebase_auth.domain.util.AuthResultContract
-import com.sebqv97.myapplication.firebase_auth.presentation.auth_activities.AuthActivity
 import com.sebqv97.myapplication.firebase_auth.presentation.component.ButtonInput
 import com.sebqv97.myapplication.firebase_auth.presentation.component.TextInput
 import com.sebqv97.myapplication.firebase_auth.presentation.util.InputType
+import com.sebqv97.myapplication.firebase_auth.util.emailValidator
+import com.sebqv97.myapplication.firebase_auth.util.passwordValidator
 import kotlinx.coroutines.launch
 
 
@@ -116,14 +116,38 @@ fun LoginScreen(
                 getValue = { password.value = it },
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
-                    viewModel.loginUser(AuthUser(email.value, password.value))
+                    val emailValidation = emailValidator(email.value)
+                    val passwordValidation = passwordValidator(password.value)
+                    if (emailValidation == null) {
+                        if (passwordValidation == null) {
+                            viewModel.loginUser(AuthUser(email.value, password.value))
+                        }else{
+                            Toast.makeText(context,passwordValidation,Toast.LENGTH_SHORT).show()
+                        }
+                    }else{
+                        Toast.makeText(context,emailValidation,Toast.LENGTH_SHORT).show()
+                    }
+
                 }),
                 focusRequester = passwordFocusRequester
             )
 
 
             Button(
-                onClick = { viewModel.loginUser(AuthUser(email.value, password.value)) },
+                onClick = {
+                    val emailValidation = emailValidator(email.value)
+                    val passwordValidation = passwordValidator(password.value)
+                    if (emailValidation == null) {
+                        if (passwordValidation == null) {
+                            viewModel.loginUser(AuthUser(email.value, password.value))
+                        }else{
+                            Toast.makeText(context,passwordValidation,Toast.LENGTH_SHORT).show()
+                        }
+                    }else{
+                        Toast.makeText(context,emailValidation,Toast.LENGTH_SHORT).show()
+                    }
+
+                },
                 modifier = modifier.fillMaxWidth()
             ) {
                 Text(text = "SIGN IN", modifier = modifier.padding(vertical = 8.dp))
@@ -163,13 +187,13 @@ fun LoginScreen(
                 TextButton(onClick =
                 {
                     // Usage of the new Navigator
-                         navigator.navigate(RegisterScreenDestination)
+                    navigator.navigate(RegisterScreenDestination)
                 }
                 ) {
                     Text("SIGN UP")
                 }
             }
-            if(user.encounteredError != null){
+            if (user.encounteredError != null) {
                 val errorMessage = getWordsUseCaseErrorHandler(user.encounteredError!!)
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             }
