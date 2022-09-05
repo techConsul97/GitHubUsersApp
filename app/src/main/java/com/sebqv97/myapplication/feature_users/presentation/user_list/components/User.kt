@@ -64,7 +64,6 @@ import com.sebqv97.myapplication.R
                             modifier = modifier
                                 .height(80.dp)
                                 .width(80.dp)
-                                .padding(start = 24.dp)
                                 .clip(CircleShape),
                             contentScale = ContentScale.Crop
                         )

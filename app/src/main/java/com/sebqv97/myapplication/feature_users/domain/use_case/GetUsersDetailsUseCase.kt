@@ -1,14 +1,11 @@
 package com.sebqv97.myapplication.feature_users.domain.use_case
 
 import com.sebqv97.myapplication.core.util.ErrorTypes
-import com.sebqv97.myapplication.core.util.Resource
-import com.sebqv97.myapplication.feature_users.data.repository.UsersRepositoryImpl
+import com.sebqv97.myapplication.core.util.ResultState
 import com.sebqv97.myapplication.feature_users.domain.model.UserDetailsItemModel
 import com.sebqv97.myapplication.feature_users.domain.repository.UsersRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
@@ -16,11 +13,11 @@ class GetUsersDetailsUseCase @Inject constructor(
     private val usersRepository: UsersRepository
 ) {
 
-    operator fun invoke(searchedUsername:String): Flow<Resource<UserDetailsItemModel>> = flow {
+    operator fun invoke(searchedUsername:String): Flow<ResultState<UserDetailsItemModel>> = flow {
 
         //call the api
         try {
-            emit(Resource.Loading())
+            emit(ResultState.Loading())
             val searchedUserResponse = usersRepository.getUser(searchedUsername)
             if(searchedUserResponse.isSuccessful){
 
@@ -36,19 +33,19 @@ class GetUsersDetailsUseCase @Inject constructor(
 
             }else{
                 val errorCode = searchedUserResponse.code()
-               emit(Resource.Error(ErrorTypes.ProblematicHttpRequest(errorCode)))
+               emit(ResultState.Error(ErrorTypes.ProblematicHttpRequest(errorCode)))
             }
 
         }catch (e:IOException){
-            emit(Resource.Error(ErrorTypes.InternetConnectionFailed()))
+            emit(ResultState.Error(ErrorTypes.InternetConnectionFailed()))
         }
 
         //Search it and retrieve it
         usersRepository.readSpecificUser(searchedUsername).collect{ foundUser->
             if(foundUser.equals(null)){
-                emit(Resource.Error<UserDetailsItemModel>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
+                emit(ResultState.Error<UserDetailsItemModel>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
             }else{
-                emit(Resource.Success(foundUser.toUserDetailsItemModel()))
+                emit(ResultState.Success(foundUser.toUserDetailsItemModel()))
             }
 
         }

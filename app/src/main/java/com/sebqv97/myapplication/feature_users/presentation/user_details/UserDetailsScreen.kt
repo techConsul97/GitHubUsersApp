@@ -35,13 +35,6 @@ fun UserDetailsScreen(
     state.user?.let { user ->
 
             Scaffold(backgroundColor = Color.Transparent,
-                topBar = {
-                    UserAppBar(
-                        modifier = modifier,
-                        navController = navController,
-                        user = user
-                    )
-                },
                 content = {
                     Column {
 

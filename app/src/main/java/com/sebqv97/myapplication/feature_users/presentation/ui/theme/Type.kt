@@ -1,4 +1,4 @@
-package com.sebqv97.myapplication.ui.theme
+package com.sebqv97.myapplication.feature_users.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

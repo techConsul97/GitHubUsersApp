@@ -4,12 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.sebqv97.myapplication.core.util.Resource
-import com.sebqv97.myapplication.feature_users.domain.use_case.FetchUserUseCase
-import com.sebqv97.myapplication.feature_users.presentation.user_list.UsersListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 

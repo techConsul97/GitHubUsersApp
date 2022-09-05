@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sebqv97.myapplication.core.util.Resource
+import com.sebqv97.myapplication.core.util.ResultState
 import com.sebqv97.myapplication.feature_users.domain.use_case.FetchUserUseCase
 import com.sebqv97.myapplication.feature_users.domain.use_case.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,14 +31,14 @@ class UserListViewModel @Inject constructor(
     private fun getUsers() {
         getUsersUseCase().onEach { result ->
             when (result) {
-                is Resource.Success -> {
+                is ResultState.Success -> {
                     _state.value = UsersListState(users = result.data!!)
 
                 }
-                is Resource.Error -> {
+                is ResultState.Error -> {
                     _state.value = UsersListState(error = result.errorType)
                 }
-                is Resource.Loading -> {
+                is ResultState.Loading -> {
                     _state.value = UsersListState(isLoading = true)
                 }
             }
@@ -50,17 +50,17 @@ class UserListViewModel @Inject constructor(
         viewModelScope.launch {
             fetchUserUseCase(searchedUserByUsername).collect { result ->
                 when (result) {
-                    is Resource.Success -> {
+                    is ResultState.Success -> {
                         _state.value = UsersListState(users = listOf(result.data!!))
                         this.coroutineContext.cancel()
                         Log.d("state",_state.value.toString())
 
                     }
-                    is Resource.Error -> {
+                    is ResultState.Error -> {
                         _state.value = UsersListState(error = result.errorType)
                         this.coroutineContext.cancel()
                     }
-                    is Resource.Loading -> {
+                    is ResultState.Loading -> {
                         _state.value = UsersListState(isLoading = true)
                         this.coroutineContext.cancel()
                     }

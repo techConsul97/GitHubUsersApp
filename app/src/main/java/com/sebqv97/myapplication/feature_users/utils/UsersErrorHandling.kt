@@ -11,6 +11,8 @@ fun getWordsUseCaseErrorHandler(errorType: ErrorTypes):String{
         is ErrorTypes.ProblematicHttpRequest-> errorType.message
         is ErrorTypes.EmptySearchField-> errorType.message
         is ErrorTypes.DBInsertionSuccessRetrievingFailed -> errorType.message
+        is ErrorTypes.UserLoginFailed -> errorType.message
+        is ErrorTypes.UserRegistrationFailed -> errorType.message
         else -> "Unexpected Error"
     }
 }

@@ -1,7 +1,6 @@
 package com.sebqv97.myapplication.feature_users.presentation.user_details.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sebqv97.myapplication.R
 import com.sebqv97.myapplication.feature_users.domain.model.UserDetailsItemModel
-import com.sebqv97.myapplication.ui.theme.Shapes
 
 @Composable
 fun UserOverview(
@@ -49,7 +47,6 @@ fun UserOverview(
                 modifier = modifier
                     .height(120.dp)
                     .width(120.dp)
-                    .padding(start = 24.dp)
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
