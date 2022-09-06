@@ -6,14 +6,9 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.tasks.Task
-import javax.inject.Inject
 
-class AuthResultContract
-: ActivityResultContract<Int, Task<GoogleSignInAccount>?>() {
-    @Inject lateinit var googleSignInClient:GoogleSignInClient
-
+class AuthResultContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?>() {
     override fun createIntent(context: Context, input: Int): Intent =
         getGoogleSignInClient(context).signInIntent.putExtra("input",input)
 

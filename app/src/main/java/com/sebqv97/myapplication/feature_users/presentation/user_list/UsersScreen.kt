@@ -52,7 +52,7 @@ import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
                             searchBarViewModel.updateSearchWidgetState(SearchUserWidgetState.CLOSED)
                             navController.navigate(Screens.UserDetailScreen.route + "/${user.username}")
                         },
-                        onFavoriteClicked = {},//ToBeImplemented
+                        onFavoriteClicked = {user -> viewModel.markUserAsFavorite(user)},//ToBeImplemented
                         modifier = modifier
                     )
                 }
