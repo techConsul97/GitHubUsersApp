@@ -22,10 +22,11 @@ class GetUsersUseCase @Inject constructor(
             if (usersResponseList.isEmpty()) {
                 emit(ResultState.Error<List<UserItemModel>>(ErrorTypes.ApiQueryTypeError()))
             } else {
-                val usersListEntity = usersResponseList.map { it.toUserEntity() }
-                //insert into the database
-                usersRepository.deleteUsers()
-                usersRepository.insertUsers(usersListEntity)
+//                val usersListEntity = usersResponseList.map { it.toUserEntity() }
+//                //insert into the database
+//                usersRepository.deleteUsers()
+//                usersRepository.insertUsers(usersListEntity)
+                emit(ResultState.Success(data = usersResponseList.map { it.toUserItemModel() }))
 
 
             }
@@ -39,13 +40,13 @@ class GetUsersUseCase @Inject constructor(
 
 
 
-        usersRepository.readUsers().collect{ data->
-            if(data.isEmpty()){
-                emit(ResultState.Error<List<UserItemModel>>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
-            }else{
-                emit(ResultState.Success(data.map { it.toUserItemModel() }))
-            }
-        }
+//        usersRepository.readUsers().collect{ data->
+//            if(data.isEmpty()){
+//                emit(ResultState.Error<List<UserItemModel>>(ErrorTypes.DBInsertionSuccessRetrievingFailed()))
+//            }else{
+//                emit(ResultState.Success(data.map { it.toUserItemModel() }))
+//            }
+//        }
 
     }
 

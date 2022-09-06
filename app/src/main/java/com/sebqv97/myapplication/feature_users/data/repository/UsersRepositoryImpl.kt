@@ -22,8 +22,6 @@ class UsersRepositoryImpl @Inject constructor(
 
     override suspend fun getUser(searchedUsername: String): Response<UserDetailsDto> {
         return  usersApi.getDataFromPath(searchedUsername)
-
-
     }
 
     override suspend fun deleteUsers() {

@@ -12,7 +12,7 @@ import com.sebqv97.myapplication.feature_users.domain.use_case.FetchUserUseCase
 import com.sebqv97.myapplication.feature_users.domain.use_case.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,26 +32,29 @@ class UserListViewModel @Inject constructor(
     }
 
     private fun getUsers() {
-        getUsersUseCase().onEach { result ->
-            when (result) {
-                is ResultState.Success -> {
-                    result.data!!.forEach {
-                        if(checkUserIsFavorite(it.username!!)){
-                            it.isFavorite = true
+        viewModelScope.launch {
+            getUsersUseCase().collect { result ->
+                when (result) {
+                    is ResultState.Success -> {
+                        result.data!!.forEach {
+                            if (checkUserIsFavorite(it.username!!)) {
+                                it.isFavorite = true
+                            }
                         }
-                    }
-                    _state.value = UsersListState(users = result.data)
+                        _state.value = UsersListState(users = result.data)
 
-                }
-                is ResultState.Error -> {
-                    _state.value = UsersListState(error = result.errorType)
-                }
-                is ResultState.Loading -> {
-                    _state.value = UsersListState(isLoading = true)
+                    }
+                    is ResultState.Error -> {
+                        _state.value = UsersListState(error = result.errorType)
+                    }
+                    is ResultState.Loading -> {
+                        _state.value = UsersListState(isLoading = true)
+                    }
                 }
             }
 
-        }.launchIn(viewModelScope)
+
+        }
     }
 
     fun getUserByUsername(searchedUserByUsername: String?) {
@@ -61,7 +64,7 @@ class UserListViewModel @Inject constructor(
                     is ResultState.Success -> {
                         _state.value = UsersListState(users = listOf(result.data!!))
                         this.coroutineContext.cancel()
-                        Log.d("state",_state.value.toString())
+                        Log.d("state", _state.value.toString())
 
                     }
                     is ResultState.Error -> {
@@ -79,23 +82,25 @@ class UserListViewModel @Inject constructor(
 
     }
 
-    fun markUserAsFavorite(user:UserItemModel){
-        viewModelScope.launch{
+    fun markUserAsFavorite(user: UserItemModel) {
+        val job = viewModelScope.launch {
             favoriteUserUseCase.insertFavoriteUser(user)
         }
+        job.cancel()
+        getUsers()
 
     }
 
-    fun unmarkUserFromFavorite(user:UserItemModel){
+    fun unmarkUserFromFavorite(user: UserItemModel) {
         viewModelScope.launch {
             favoriteUserUseCase.deleteFavoriteUser(user)
         }
     }
 
-    fun checkUserIsFavorite(username:String):Boolean{
+    fun checkUserIsFavorite(username: String): Boolean {
         var appears = false
-        viewModelScope.launch{
-           appears= favoriteUserUseCase.checkUserIsInFavorite(username).first() != null
+        viewModelScope.launch {
+            appears = favoriteUserUseCase.checkUserIsInFavorite(username).first() != null
 
         }
         return appears

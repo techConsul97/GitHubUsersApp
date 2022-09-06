@@ -51,4 +51,9 @@ data class ListUsersDto(
         username = login,
 
     )
+    fun toUserItemModel():UserItemModel = UserItemModel(
+        avatarUrl = avatarUrl,
+        id = id,
+        username = login
+    )
 }

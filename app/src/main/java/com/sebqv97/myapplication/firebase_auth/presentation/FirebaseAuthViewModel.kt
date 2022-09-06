@@ -22,6 +22,11 @@ class FirebaseAuthViewModel @Inject constructor(
     private val _authState: MutableState<AuthUserState> = mutableStateOf(value = AuthUserState())
     val authState get() = _authState
 
+
+    init {
+
+
+    }
     fun createUserWithCredentials(authUser: AuthUser) {
 
         viewModelScope.launch {
@@ -66,8 +71,6 @@ class FirebaseAuthViewModel @Inject constructor(
   suspend  fun googleSignIn(email:String, displayName:String){
             delay(2000)
             _authState.value = AuthUserState(user = AuthUser(email = email, displayName = displayName))
-
-
     }
 
 
