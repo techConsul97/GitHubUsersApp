@@ -1,7 +1,6 @@
 package com.sebqv97.myapplication
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -48,43 +47,26 @@ class MainActivity : ComponentActivity() {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 CircularProgressIndicator(modifier = Modifier.fillMaxSize())
 
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Could not connect to Internet",
+                                    Toast.LENGTH_LONG
+                                ).show()
 
-                                    val toastDurationInMilliSeconds = 10000
-                                    val toastCountDown: CountDownTimer
-                                    val mToastToShow = Toast.makeText(
-                                        applicationContext,
-                                        "Could not connect to Internet",
-                                        Toast.LENGTH_LONG
-                                    )
-                                    toastCountDown = object : CountDownTimer(
-                                        toastDurationInMilliSeconds.toLong(), 5000 /*Tick
-      duration*/
-                                    ) {
-                                        override fun onTick(millisUntilFinished: Long) {
-                                            mToastToShow.show()
-                                        }
 
-                                        override fun onFinish() {
-                                            mToastToShow.cancel()
-                                        }
-                                    }
-                                    mToastToShow.show()
-                                    toastCountDown.start()
-                                }
                             }
-
 
                         }
 
+
                     }
-
-
+                }
 
             }
         }
-
     }
 }
+
 
 
 

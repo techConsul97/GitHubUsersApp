@@ -13,35 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.sebqv97.myapplication.firebase_auth.data.model.AuthUser
 
-@Destination
+
 @Composable
-fun HomeScreen(viewModel: FirebaseAuthViewModel = hiltViewModel()) {
-
-
-    var email  by remember{ mutableStateOf("")}
-    var password by remember {mutableStateOf("") }
-    val state by viewModel.authState
-
-
-    
-    Column() {
-        TextField(value = email, onValueChange = {email = it}, modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(40.dp), placeholder = { Text(
-            text = "Email"
-        )})
-        TextField(value = password, onValueChange = {password = it}, modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(40.dp), placeholder = { Text(
-            text = "Password"
-        )})
-
-        Button(onClick = { viewModel.createUserWithCredentials(AuthUser(email = email, password = password)) }) {
-
-        }
-//        if(state.isSuccessful){
-//            Text(text = "User logged in", modifier = Modifier.fillMaxSize())
-//        }
-    }
-
+fun AuthUserScreen() {
 }

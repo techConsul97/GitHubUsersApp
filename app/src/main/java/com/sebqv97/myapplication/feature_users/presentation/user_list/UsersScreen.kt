@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +15,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.annotation.Destination
+import com.sebqv97.myapplication.feature_bottom_drawer.BottomNavGraph
+import com.sebqv97.myapplication.feature_bottom_drawer.component.BottomBar
 import com.sebqv97.myapplication.feature_users.presentation.Screens
 import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUseViewModel
 import com.sebqv97.myapplication.feature_users.presentation.search_user.SearchUserWidgetState
@@ -30,9 +34,17 @@ import com.sebqv97.myapplication.feature_users.utils.getWordsUseCaseErrorHandler
     modifier: Modifier = Modifier
     ) {
         val state = viewModel.state.value
-
+    val navController = rememberNavController()
+//    Scaffold(
+//    Scaffold(
+//        bottomBar = { BottomBar(navController = navController) }
+//    ) {
+//        BottomNavGraph(navController = navController)
+//    }
     Column() {
-        Box(modifier = modifier.fillMaxWidth().heightIn(50.dp))
+        Box(modifier = modifier
+            .fillMaxWidth()
+            .heightIn(50.dp))
 
     }
 
